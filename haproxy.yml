@@ -1,0 +1,45 @@
+---
+name: haproxy
+
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+
+instance_groups:
+- name: haproxy
+  azs: [z1]
+  instances: 1
+  vm_type: default
+  stemcell: ubuntu
+  networks: [{name: default}]
+  jobs:
+  - name: haproxy
+    release: haproxy
+    properties:
+      ha_proxy:
+        backend_port: 80
+        backend_servers: [10.244.0.3,10.244.0.4,10.244.0.5]
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+  serial: false
+
+stemcells:
+  - alias: ubuntu
+    os: ubuntu-xenial
+    version: latest
+
+releases:
+- name: bpm
+  sha1: 0f2efdad0e9702faa23ead010c1b866f985ba537
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.76-20200616-225534-615382607-20200616225536.tgz
+  version: 1.1.8
+- name: haproxy
+  version: 10.1.0
+  url: https://github.com/cloudfoundry-incubator/haproxy-boshrelease/releases/download/v10.1.0/haproxy-10.1.0.tgz
+  sha1: c892c02b90913a669d06b03ce27964dd403139f4
