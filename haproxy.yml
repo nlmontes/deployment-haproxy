@@ -7,6 +7,25 @@ addons:
   - name: bpm
     release: bpm
 
+releases:
+- name: bpm
+  sha1: 0f2efdad0e9702faa23ead010c1b866f985ba537
+  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.76-20200616-225534-615382607-20200616225536.tgz
+  version: 1.1.8
+- name: "haproxy"
+  version: "10.1.0"
+  url: "https://bosh.io/d/github.com/cloudfoundry-community/haproxy-boshrelease?v=10.1.0"
+  sha1: "5258d6a8e5aa164b8154a24e0e6db6373755e4fb"
+- name: "garden-runc"
+  version: "1.15.1"
+  url: "https://bosh.io/d/github.com/cloudfoundry/garden-runc-release?v=1.15.1"
+  sha1: "bdac2dc7debc2e9b4b9e32f009cb93ac281e5480"
+
+stemcells:
+  - alias: ubuntu
+    os: ubuntu-xenial
+    version: latest
+
 instance_groups:
 - name: haproxy
   azs: [z1]
@@ -20,10 +39,14 @@ instance_groups:
     properties:
       ha_proxy:
         backend_port: 80
-        backend_servers: 
-        - 10.244.0.3
-        - 10.244.0.4
-        - 10.244.0.5
+        backend_servers: [10.244.0.2,10.244.0.3]
+  - release: garden-runc
+    name: garden
+    properties:
+      garden:
+        listen_network: tcp
+        listen_address: 0.0.0.0:7777
+        allow_host_access: true
 
 update:
   canaries: 1
@@ -32,17 +55,6 @@ update:
   update_watch_time: 1000-30000
   serial: false
 
-stemcells:
-  - alias: ubuntu
-    os: ubuntu-xenial
-    version: latest
 
-releases:
-- name: bpm
-  sha1: 0f2efdad0e9702faa23ead010c1b866f985ba537
-  url: https://s3.amazonaws.com/bosh-compiled-release-tarballs/bpm-1.1.8-ubuntu-xenial-621.76-20200616-225534-615382607-20200616225536.tgz
-  version: 1.1.8
-- name: haproxy
-  version: 10.1.0
-  url: https://github.com/cloudfoundry-incubator/haproxy-boshrelease/releases/download/v10.1.0/haproxy-10.1.0.tgz
-  sha1: c892c02b90913a669d06b03ce27964dd403139f4
+
+
