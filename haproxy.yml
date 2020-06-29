@@ -21,9 +21,9 @@ instance_groups:
       ha_proxy:
         backend_port: 80
         backend_servers: 
-        - "10.244.0.3"
-        - "10.244.0.4"
-        - "10.244.0.5"
+        - 10.244.0.3
+        - 10.244.0.4
+        - 10.244.0.5
 
 update:
   canaries: 1
