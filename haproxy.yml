@@ -39,7 +39,7 @@ instance_groups:
     properties:
       ha_proxy:
         backend_port: 80
-        backend_servers: [10.244.0.2,10.244.0.3]
+        backend_servers: [10.244.0.2,10.244.0.3,10.244.0.8,10.244.0.9]
   - release: garden-runc
     name: garden
     properties:
